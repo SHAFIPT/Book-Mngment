@@ -1,5 +1,5 @@
 import mongoose, { Schema, model, Document, Types } from 'mongoose';
-
+import slugify from 'slugify';
 export interface IBook extends Document {
     bookId: string;
     title: string;
@@ -33,13 +33,12 @@ const BookSchema = new Schema<IBook>(
 );
 
 // Auto-generate slug before save
-BookSchema.pre<IBook>('save', function (next) {
+BookSchema.pre('save', function (this: IBook, next: (err?: Error) => void): void {
     if (!this.slug) {
-        const slugify = require('slugify');
-        this.slug = slugify(this.title, { lower: true, strict: true });
+      this.slug = slugify(this.title, { lower: true, strict: true });
     }
     next();
-});
+  });
 
 // Create indexes for better query performance
 BookSchema.index({ title: 'text', description: 'text' });

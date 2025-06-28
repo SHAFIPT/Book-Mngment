@@ -4,7 +4,6 @@ import User from '../model/User';
 export const checkUserActiveStatus: RequestHandler = async (req: any, res, next) => {
   try {
       const userId = req.user?.id;
-      console.log('this sihte user Id : ',userId)
     if (!userId) {
       res.status(401).json({ message: 'Unauthorized' });
       return;
@@ -13,7 +12,6 @@ export const checkUserActiveStatus: RequestHandler = async (req: any, res, next)
 
     const user = await User.findById(userId);
       
-      console.log('this is the user :::',user)
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });

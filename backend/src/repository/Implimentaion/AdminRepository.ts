@@ -2,6 +2,19 @@ import User, { IUser } from "../../model/User";
 import Purchase from "../../model/Purchase";
 import { IAdminRepository } from "../Interface/IAdminRepository";
 import BookModel, { IBook } from "../../model/Book";
+import { Types } from "mongoose";
+
+interface PopulatedAuthor {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+// Create a type that represents IBook with populated authors and totalSales
+type BookWithPopulatedAuthors = Omit<IBook, 'authors'> & {
+  authors: PopulatedAuthor[];
+  totalSales: number;
+}
 
 export class AdminRepository implements IAdminRepository {
     async getAllUsers(page: number, limit: number, search: string, filter: string) {
@@ -125,10 +138,15 @@ export class AdminRepository implements IAdminRepository {
     }
   
     // Combine sales data
-    const booksWithSales = books.map(book => ({
-      ...book,
-      totalSales: salesMap.get(book._id.toString()) || 0
-    }));
+    const booksWithSales = books.map((book) => {
+      // Type assertion to handle the populated structure from lean query
+      const populatedBook = book as any;
+      
+      return {
+        ...populatedBook,
+        totalSales: salesMap.get(populatedBook._id.toString()) || 0
+      } as BookWithPopulatedAuthors;
+    });
   
     return {
       books: booksWithSales,

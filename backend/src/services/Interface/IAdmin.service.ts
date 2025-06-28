@@ -1,20 +1,21 @@
 import { IBook } from "../../model/Book";
 import { IPurchase } from "../../model/Purchase";
 import { IUser } from "../../model/User";
+import { BookWithPopulatedAuthors } from "../../repository/Interface/IAdminRepository";
 
 export interface IAdminService {
     getAllUsers(page: number, limit: number, search: string, filter: string): Promise<IUser[]>;
     getAllBooks(
-        page: number,
-        limit: number,
-        search: string,
-        filter: string
-      ): Promise<{
-        books: IBook[];
-        currentPage: number;
-        totalPages: number;
-        totalBooks: number;
-      }>;
+      page: number,
+      limit: number,
+      search: string,
+      filter: string
+    ): Promise<{
+      books: BookWithPopulatedAuthors[];
+      currentPage: number;
+      totalPages: number;
+      totalBooks: number;
+    }>;
     getAllPurchases(): Promise<IPurchase[]>;
     getRevenueSummary(): Promise<{
       currentMonth: number;
