@@ -13,8 +13,11 @@ const port = process.env.PORT || 5000;
 connectDB()
 
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
+  origin: [
+    'http://localhost:5173',
+    'https://book-mngment.vercel.app'
+  ],
+  credentials: true
 }));
 
 app.use(express.urlencoded({ extended: true })); 
