@@ -7,7 +7,7 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from ".
 import { IAuthService } from "../Interface/Iauth.Service";
 import { ApiError } from "../../utils/ApiError";
 import { HttpStatusCode } from "../../constants/statusCode";
-
+import { v4 as uuidv4 } from 'uuid';
 
 export class AuthService implements IAuthService {
   constructor(private authRepo: IAuthRepository) {}
@@ -22,8 +22,7 @@ export class AuthService implements IAuthService {
     else if (data.role === 'RETAIL') prefix = 'R';
   
     // Count users with the same role
-    const userCount = await this.authRepo.countUsersByRole(data.role);
-    const userId = `${prefix}${userCount + 1}`;
+    const userId = `${prefix}-${uuidv4().slice(0, 8)}`;
   
     const user = await this.authRepo.createUser({
       ...data,
