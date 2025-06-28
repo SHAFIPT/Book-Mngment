@@ -978,7 +978,11 @@ const AdminDashboard: FC = () => {
                       <div className="space-y-2 mb-4">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-500">Authors:</span>
-                          <span className="font-medium">{book.authors.map((author) => author.name).join(', ')}</span>
+                          <span className="font-medium">
+                            {book.authors.map((author) =>
+                              typeof author === 'string' ? author : author.name
+                            ).join(', ')}
+                          </span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-500">Price:</span>
